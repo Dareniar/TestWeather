@@ -79,7 +79,7 @@ class DetailWeatherViewController: UIViewController {
         temperatureLabel.text = "\(json["currently"]["temperature"].intValue) °C"
         windSpeedLabel.text = "\(json["currently"]["windSpeed"].intValue)  m/s"
         humidityLabel.text = "\(Int(json["currently"]["humidity"].doubleValue * 100))%"
-        precipLabel.text = "\(Int(json["currently"]["precipProbability"].doubleValue) * 100)%"
+        precipLabel.text = "\(Int((json["currently"]["precipProbability"].doubleValue) * 100))%"
         
         conditionImage1.image = Helper.getImage(with: json["daily"]["data"][0]["icon"].stringValue)
         temperatureLabel1.text = "\(Int((json["daily"]["data"][0]["temperatureHigh"].doubleValue + json["daily"]["data"][0]["temperatureLow"].doubleValue))/2) °C"

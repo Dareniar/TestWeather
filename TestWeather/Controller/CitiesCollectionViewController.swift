@@ -29,7 +29,9 @@ class CitiesCollectionViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(UINib.init(nibName: "CitiesCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "CityCell")
-        
+        }
+    
+    override func viewWillAppear(_ animated: Bool) {
         loadData()
     }
     
