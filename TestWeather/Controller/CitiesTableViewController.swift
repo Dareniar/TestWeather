@@ -122,21 +122,29 @@ extension CitiesTableViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-        isSearching = true
-        
-        let cities = Helper.cityDictionary.values.flatMap { $0 }
-        
-        results = cities.filter {
-            $0.name!.lowercased().contains(searchBar.text!.lowercased())
-        }
-        
-        if searchText == "" {
-            isSearching = false
+        DispatchQueue.global(qos: .userInteractive).async {
+            self.isSearching = true
+            
+            let cities = Helper.cityDictionary.values.flatMap { $0 }
+            
             DispatchQueue.main.async {
-                self.searchBar.resignFirstResponder()
+                self.results = cities.filter { $0.name!.lowercased().contains(searchBar.text!.lowercased()) }
             }
-            results = cities
+            
+            if searchText == "" {
+                self.isSearching = false
+                DispatchQueue.main.async {
+                    self.searchBar.resignFirstResponder()
+                }
+                self.results = cities
+            }
+            DispatchQueue.main.async {
+                self.citiesTableView.reloadData()
+            }
         }
-        citiesTableView.reloadData()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
 }
