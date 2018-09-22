@@ -85,9 +85,7 @@ extension CitiesTableViewController: UITableViewDelegate, UITableViewDataSource 
         let cell = tableView.dequeueReusableCell(withIdentifier: "cityCell", for: indexPath)
         
         if !isSearching {
-            
-            //print(cityDictionary[keys[indexPath.row]])
-            
+                        
             cell.textLabel?.text = Helper.cityDictionary[Helper.keys![indexPath.section]]![indexPath.row].name
             
         } else {

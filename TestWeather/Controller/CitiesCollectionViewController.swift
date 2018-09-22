@@ -92,7 +92,7 @@ extension CitiesCollectionViewController: UICollectionViewDelegate, UICollection
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let availableWidth = view.frame.width - 20
-        let widthPerItem = availableWidth / 3
+        let widthPerItem = availableWidth / 3.1
         
         return CGSize(width: widthPerItem, height: widthPerItem)
     }

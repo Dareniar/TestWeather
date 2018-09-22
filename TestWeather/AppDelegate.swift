@@ -17,7 +17,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        preloadSQL()
+        let userDefaults = UserDefaults.standard
+
+        let defaultValues = ["firstRun": true]
+
+        userDefaults.register(defaults: defaultValues)
+
+        if userDefaults.bool(forKey: "firstRun") {
+
+            userDefaults.set(false, forKey: "firstRun")
+            
+            preloadSQL()
+        
+        }
         
         do {
             Helper.keys = try persistentContainer.viewContext.fetch(Key.fetchRequest()).map { $0.letter! }
@@ -28,8 +40,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             print(error)
         }
-        
-        // print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
         return true
     }
@@ -72,37 +82,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate {
     
     func preloadSQL() {
+        
         let sqlitePath = Bundle.main.path(forResource: "TestWeather", ofType: "sqlite")
-//        let sqlitePath_shm = Bundle.main.path(forResource: "TestWeather", ofType: "sqlite-shm")
-//        let sqlitePath_wal = Bundle.main.path(forResource: "TestWeather", ofType: "sqlite-wal")
         
-        let URL1 = URL(fileURLWithPath: sqlitePath!)
-//        let URL2 = URL(fileURLWithPath: sqlitePath_shm!)
-//        let URL3 = URL(fileURLWithPath: sqlitePath_wal!)
-        let URL4 = URL(fileURLWithPath: NSPersistentContainer.defaultDirectoryURL().relativePath + "/TestWeather.sqlite")
-//        let URL5 = URL(fileURLWithPath: NSPersistentContainer.defaultDirectoryURL().relativePath + "/TestWeather.sqlite-shm")
-//        let URL6 = URL(fileURLWithPath: NSPersistentContainer.defaultDirectoryURL().relativePath + "/TestWeather.sqlite-wal")
-        
-        if !FileManager.default.fileExists(atPath: NSPersistentContainer.defaultDirectoryURL().relativePath + "/MyDB.sqlite") {
+        let sourceURL = URL(fileURLWithPath: sqlitePath!)
+        let destinationURL = URL(fileURLWithPath: NSPersistentContainer.defaultDirectoryURL().relativePath + "/TestWeather.sqlite")
             
-            do {
-                try FileManager.default.copyItem(at: URL1, to: URL4)
-//                try FileManager.default.copyItem(at: URL2, to: URL5)
-//                try FileManager.default.copyItem(at: URL3, to: URL6)
-                
-                print("=======================")
-                print("FILES COPIED")
-                print("=======================")
-                
-            } catch {
-                print("=======================")
-                print("ERROR IN COPY OPERATION")
-                print("=======================")
-            }
-        } else {
-            print("=======================")
-            print("FILES EXIST")
-            print("=======================")
+        do {
+            try FileManager.default.removeItem(atPath: NSPersistentContainer.defaultDirectoryURL().relativePath + "/TestWeather.sqlite")
+            try FileManager.default.copyItem(at: sourceURL, to: destinationURL)
+        } catch {
+            print(error)
         }
     }
     
