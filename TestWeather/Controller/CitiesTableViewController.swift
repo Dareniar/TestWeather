@@ -20,6 +20,8 @@ class CitiesTableViewController: UIViewController {
     
     var results: [City]?
     
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -122,26 +124,28 @@ extension CitiesTableViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-        DispatchQueue.global(qos: .userInteractive).async {
-            self.isSearching = true
-            
-            let cities = Helper.cityDictionary.values.flatMap { $0 }
-            
+        self.isSearching = true
+        
+        let request: NSFetchRequest<City> = City.fetchRequest()
+        
+        request.predicate = NSPredicate(format: "name CONTAINS[cd] %@", searchBar.text!)
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        
+        if searchText == "" {
+            self.isSearching = false
             DispatchQueue.main.async {
-                self.results = cities.filter { $0.name!.lowercased().contains(searchBar.text!.lowercased()) }
-            }
-            
-            if searchText == "" {
-                self.isSearching = false
-                DispatchQueue.main.async {
-                    self.searchBar.resignFirstResponder()
-                }
-                self.results = cities
-            }
-            DispatchQueue.main.async {
-                self.citiesTableView.reloadData()
+                self.searchBar.resignFirstResponder()
             }
         }
+        
+        do {
+            results = try context.fetch(request)
+        } catch {
+            print("Error fetching data from context \(error)")
+        }
+        
+        self.citiesTableView.reloadData()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

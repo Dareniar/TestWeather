@@ -156,9 +156,5 @@ class DetailWeatherViewController: UIViewController {
         } catch {
             print("Error saving context \(error)")
         }
-        
-        if let startView = navigationController?.viewControllers[0] as? CitiesCollectionViewController {
-            startView.loadData()
-        }
     }
 }
