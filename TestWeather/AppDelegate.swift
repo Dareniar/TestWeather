@@ -32,10 +32,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         do {
-            Helper.keys = try persistentContainer.viewContext.fetch(Key.fetchRequest()).map { $0.letter! }
-            Helper.keys = Helper.keys!.sorted()
-            for key in Helper.keys! {
-                Helper.cityDictionary[key] = getCities(for: key)?.sorted {$0.name! < $1.name! }
+            Helper.shared.keys = try persistentContainer.viewContext.fetch(Key.fetchRequest()).map { $0.letter! }
+            Helper.shared.keys = Helper.shared.keys!.sorted()
+            for key in Helper.shared.keys! {
+                Helper.shared.cityDictionary[key] = getCities(for: key)?.sorted {$0.name! < $1.name! }
             }
         } catch {
             print(error)

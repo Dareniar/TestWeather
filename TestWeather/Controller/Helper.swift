@@ -15,28 +15,30 @@ class Helper {
     
     //MARK: - Shared Properties
     
-    static let basicURL = "https://api.darksky.net/forecast/7b98a80047308516204ad5d82bb210b7/"
+    static let shared = Helper()
     
-    static var weatherJSON: JSON?
+    let basicURL = "https://api.darksky.net/forecast/7b98a80047308516204ad5d82bb210b7/"
     
-    static var weatherSaved: [WeatherData]?
+    var weatherJSON: JSON?
     
-    static var keys: [String]?
+    var weatherSaved: [WeatherData]?
     
-    static var cityDictionary = [String: [City]]()
+    var keys: [String]?
+    
+    var cityDictionary = [String: [City]]()
     
     //MARK: - Shared Methods
     
-    static func fetchWeatherData(latitude: Double, longitude: Double, completion: ( () -> ())?) {
+    func fetchWeatherData(latitude: Double, longitude: Double, completion: ( () -> ())?) {
         
-        if let url = URL(string: "\(Helper.basicURL)\(latitude),\(longitude)") {
+        if let url = URL(string: "\(self.basicURL)\(latitude),\(longitude)") {
             
             Alamofire.request(url, method: .get, parameters: ["units":"si"]).responseJSON {
                 
                 response in
                 if response.result.isSuccess {
                     
-                    weatherJSON = JSON(response.result.value!)
+                    self.weatherJSON = JSON(response.result.value!)
                     completion?()
                 } else {
                     print("Error \(String(describing: response.result.error)).")
@@ -47,7 +49,7 @@ class Helper {
         }
     }
         
-    static func getDayOfWeek(with date: Date) -> String {
+    func getDayOfWeek(with date: Date) -> String {
         
         let myCalendar = Calendar(identifier: .gregorian)
         let weekDay = myCalendar.component(.weekday, from: date)
@@ -70,7 +72,7 @@ class Helper {
         }
     }
     
-    static func getImage(with icon: String) -> UIImage {
+    func getImage(with icon: String) -> UIImage {
         
         switch (icon) {
             

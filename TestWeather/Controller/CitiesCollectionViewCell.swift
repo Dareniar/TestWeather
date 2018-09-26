@@ -23,8 +23,8 @@ class CitiesCollectionViewCell: UICollectionViewCell {
     
     public func configure(at indexPath: IndexPath) {
         
-        if let weatherData = Helper.weatherSaved {
-            weatherImage.image = Helper.getImage(with: weatherData[indexPath.row].condition!)
+        if let weatherData = Helper.shared.weatherSaved {
+            weatherImage.image = Helper.shared.getImage(with: weatherData[indexPath.row].condition!)
             temperatureLabel.text = "\(weatherData[indexPath.row].temperature) °C"
             cityLabel.text = weatherData[indexPath.row].city
         }

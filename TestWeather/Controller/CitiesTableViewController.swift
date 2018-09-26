@@ -37,10 +37,10 @@ class CitiesTableViewController: UIViewController {
             
             if !isSearching {
                 
-                let key = Helper.keys![selectedItem!.section]
-                destinationVC.longitude = Helper.cityDictionary[key]![selectedItem!.row].longitude
-                destinationVC.latitude = Helper.cityDictionary[key]![selectedItem!.row].latitude
-                destinationVC.navigationItem.title = Helper.cityDictionary[key]![selectedItem!.row].name
+                let key = Helper.shared.keys![selectedItem!.section]
+                destinationVC.longitude = Helper.shared.cityDictionary[key]![selectedItem!.row].longitude
+                destinationVC.latitude = Helper.shared.cityDictionary[key]![selectedItem!.row].latitude
+                destinationVC.navigationItem.title = Helper.shared.cityDictionary[key]![selectedItem!.row].name
                 
             } else {
                 print(results![selectedItem!.row])
@@ -60,7 +60,7 @@ extension CitiesTableViewController: UITableViewDelegate, UITableViewDataSource 
     
     func numberOfSections(in tableView: UITableView) -> Int {
         if !isSearching {
-            return Helper.keys!.count
+            return Helper.shared.keys!.count
         } else {
             return 1
         }
@@ -68,7 +68,7 @@ extension CitiesTableViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if !isSearching {
-            return Helper.keys![section]
+            return Helper.shared.keys![section]
         } else {
             return nil
         }
@@ -76,7 +76,7 @@ extension CitiesTableViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if !isSearching {
-            return Helper.cityDictionary[Helper.keys![section]]!.count
+            return Helper.shared.cityDictionary[Helper.shared.keys![section]]!.count
         } else {
             return results!.count
         }
@@ -88,7 +88,7 @@ extension CitiesTableViewController: UITableViewDelegate, UITableViewDataSource 
         
         if !isSearching {
                         
-            cell.textLabel?.text = Helper.cityDictionary[Helper.keys![indexPath.section]]![indexPath.row].name
+            cell.textLabel?.text = Helper.shared.cityDictionary[Helper.shared.keys![indexPath.section]]![indexPath.row].name
             
         } else {
             

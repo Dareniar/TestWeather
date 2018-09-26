@@ -38,15 +38,15 @@ class CitiesCollectionViewController: UIViewController {
     func loadData(with request: NSFetchRequest<WeatherData> = WeatherData.fetchRequest()) {
         
         do {
-            Helper.weatherSaved = try context.fetch(request)
+            Helper.shared.weatherSaved = try context.fetch(request)
             
-            guard let weatherData = Helper.weatherSaved else { return }
+            guard let weatherData = Helper.shared.weatherSaved else { return }
             
             for weather in weatherData {
-                Helper.fetchWeatherData(latitude: weather.latitude, longitude: weather.longitude) {
+                Helper.shared.fetchWeatherData(latitude: weather.latitude, longitude: weather.longitude) {
                     
-                    weather.condition = Helper.weatherJSON!["currently"]["icon"].stringValue
-                    weather.temperature = Int16(Helper.weatherJSON!["currently"]["temperature"].doubleValue)
+                    weather.condition = Helper.shared.weatherJSON!["currently"]["icon"].stringValue
+                    weather.temperature = Int16(Helper.shared.weatherJSON!["currently"]["temperature"].doubleValue)
                 }
             }
             do {
@@ -86,7 +86,7 @@ class CitiesCollectionViewController: UIViewController {
 extension CitiesCollectionViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let weatherData = Helper.weatherSaved {
+        if let weatherData = Helper.shared.weatherSaved {
             return weatherData.count
         } else { return 1 }
     }
@@ -109,9 +109,9 @@ extension CitiesCollectionViewController: UICollectionViewDelegate, UICollection
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        longitude = Helper.weatherSaved![indexPath.row].longitude
-        latitude = Helper.weatherSaved![indexPath.row].latitude
-        cityName = Helper.weatherSaved![indexPath.row].city
+        longitude = Helper.shared.weatherSaved![indexPath.row].longitude
+        latitude = Helper.shared.weatherSaved![indexPath.row].latitude
+        cityName = Helper.shared.weatherSaved![indexPath.row].city
         
         selectedItem = indexPath
         

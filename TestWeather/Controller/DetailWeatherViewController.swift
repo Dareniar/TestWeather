@@ -52,8 +52,8 @@ class DetailWeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        Helper.fetchWeatherData(latitude: latitude!, longitude: longitude!) {
-            self.update(with: Helper.weatherJSON!)
+        Helper.shared.fetchWeatherData(latitude: latitude!, longitude: longitude!) {
+            self.update(with: Helper.shared.weatherJSON!)
         }
         
         guard let buttonSystemItem = buttonSystemItem else { return }
@@ -75,31 +75,31 @@ class DetailWeatherViewController: UIViewController {
         temperature = Int(json["currently"]["temperature"].doubleValue)
         condition = json["currently"]["icon"].stringValue
         
-        conditionImage.image = Helper.getImage(with: json["currently"]["icon"].stringValue)
+        conditionImage.image = Helper.shared.getImage(with: json["currently"]["icon"].stringValue)
         temperatureLabel.text = "\(json["currently"]["temperature"].intValue) °C"
         windSpeedLabel.text = "\(json["currently"]["windSpeed"].intValue)  m/s"
         humidityLabel.text = "\(Int(json["currently"]["humidity"].doubleValue * 100))%"
         precipLabel.text = "\(Int((json["currently"]["precipProbability"].doubleValue) * 100))%"
         
-        conditionImage1.image = Helper.getImage(with: json["daily"]["data"][0]["icon"].stringValue)
+        conditionImage1.image = Helper.shared.getImage(with: json["daily"]["data"][0]["icon"].stringValue)
         temperatureLabel1.text = "\(Int((json["daily"]["data"][0]["temperatureHigh"].doubleValue + json["daily"]["data"][0]["temperatureLow"].doubleValue))/2) °C"
-        dayLabel1.text = Helper.getDayOfWeek(with: Date(timeIntervalSince1970: TimeInterval(json["daily"]["data"][0]["time"].intValue)))
+        dayLabel1.text = Helper.shared.getDayOfWeek(with: Date(timeIntervalSince1970: TimeInterval(json["daily"]["data"][0]["time"].intValue)))
         
-        conditionImage2.image = Helper.getImage(with: json["daily"]["data"][1]["icon"].stringValue)
+        conditionImage2.image = Helper.shared.getImage(with: json["daily"]["data"][1]["icon"].stringValue)
         temperatureLabel2.text = "\(Int((json["daily"]["data"][1]["temperatureHigh"].doubleValue + json["daily"]["data"][1]["temperatureLow"].doubleValue))/2) °C"
-        dayLabel2.text = Helper.getDayOfWeek(with: Date(timeIntervalSince1970: TimeInterval(json["daily"]["data"][1]["time"].intValue)))
+        dayLabel2.text = Helper.shared.getDayOfWeek(with: Date(timeIntervalSince1970: TimeInterval(json["daily"]["data"][1]["time"].intValue)))
         
-        conditionImage3.image = Helper.getImage(with: json["daily"]["data"][2]["icon"].stringValue)
+        conditionImage3.image = Helper.shared.getImage(with: json["daily"]["data"][2]["icon"].stringValue)
         temperatureLabel3.text = "\(Int((json["daily"]["data"][2]["temperatureHigh"].doubleValue + json["daily"]["data"][2]["temperatureLow"].doubleValue))/2) °C"
-        dayLabel3.text = Helper.getDayOfWeek(with: Date(timeIntervalSince1970: TimeInterval(json["daily"]["data"][2]["time"].intValue)))
+        dayLabel3.text = Helper.shared.getDayOfWeek(with: Date(timeIntervalSince1970: TimeInterval(json["daily"]["data"][2]["time"].intValue)))
         
-        conditionImage4.image = Helper.getImage(with: json["daily"]["data"][3]["icon"].stringValue)
+        conditionImage4.image = Helper.shared.getImage(with: json["daily"]["data"][3]["icon"].stringValue)
         temperatureLabel4.text = "\(Int((json["daily"]["data"][3]["temperatureHigh"].doubleValue + json["daily"]["data"][3]["temperatureLow"].doubleValue))/2) °C"
-        dayLabel4.text = Helper.getDayOfWeek(with: Date(timeIntervalSince1970: TimeInterval(json["daily"]["data"][3]["time"].intValue)))
+        dayLabel4.text = Helper.shared.getDayOfWeek(with: Date(timeIntervalSince1970: TimeInterval(json["daily"]["data"][3]["time"].intValue)))
         
-        conditionImage5.image = Helper.getImage(with: json["daily"]["data"][4]["icon"].stringValue)
+        conditionImage5.image = Helper.shared.getImage(with: json["daily"]["data"][4]["icon"].stringValue)
         temperatureLabel5.text = "\(Int((json["daily"]["data"][4]["temperatureHigh"].doubleValue + json["daily"]["data"][4]["temperatureLow"].doubleValue))/2) °C"
-        dayLabel5.text = Helper.getDayOfWeek(with: Date(timeIntervalSince1970: TimeInterval(json["daily"]["data"][4]["time"].intValue)))
+        dayLabel5.text = Helper.shared.getDayOfWeek(with: Date(timeIntervalSince1970: TimeInterval(json["daily"]["data"][4]["time"].intValue)))
         
     }
     
@@ -110,7 +110,7 @@ class DetailWeatherViewController: UIViewController {
     //MARK: - Data Persisting
     
     @objc func deleteItem(sender: UIBarButtonItem) {
-        context.delete(Helper.weatherSaved![selectedItemIndex!])
+        context.delete(Helper.shared.weatherSaved![selectedItemIndex!])
         saveData()
         navigationController?.popToRootViewController(animated: true)
     }
@@ -138,7 +138,7 @@ class DetailWeatherViewController: UIViewController {
         newWeather.latitude = latitude!
         newWeather.longitude = longitude!
         
-        Helper.weatherSaved?.append(newWeather)
+        Helper.shared.weatherSaved?.append(newWeather)
         
         saveData()
         
